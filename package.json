@@ -1,0 +1,30 @@
+{
+  "name": "portsandadapters",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start:prod": "npm run ./src/main/http/server.js",
+    "start:dev": "tsx --watch ./src/main/http/server.ts",
+    "build": "rm -rf ./dist && tsc -p tsconfig.json",
+    "test": "jest --passWithNoTests --runInBand --no-cache",
+    "test:integration": "NODE_ENV=test npm test -- --watchAll -c jest-integration.config.ts",
+    "test:debug": "NODE_ENV=test tsx --inspect=9022 --watch ./src/main/http/server.ts",
+    "test:unit": "npm test -- --watchAll -c jest-unit.config.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@jest/globals": "^29.7.0",
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.12.7",
+    "fastify": "^4.26.2",
+    "jest": "^29.7.0",
+    "pino-pretty": "^11.0.0",
+    "ts-jest": "^29.1.2",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.7.2",
+    "typescript": "^5.4.5"
+  }
+}
