@@ -4,13 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:prod": "npm run ./src/main/http/server.js",
-    "start:dev": "tsx --watch ./src/main/http/server.ts",
+    "start:prod": "NODE_ENV=production npm run ./src/main/http/server.js",
+    "start:dev": "NODE_ENV=development tsx --watch ./src/main/http/server.ts",
     "build": "rm -rf ./dist && tsc -p tsconfig.json",
-    "test": "jest --passWithNoTests --runInBand --no-cache",
+    "test": "NODE_ENV=test jest --passWithNoTests --runInBand --no-cache",
+    "debug:dev": "NODE_ENV=development tsx --inspect=0.0.0.0:9222 --watch ./src/main/http/server.ts",
+    "debug:prod": "NODE_ENV=production node --watch --inspect=0.0.0.0:9222 ./dist/src/main/http/server.js",
+    "debug:test": "NODE_ENV=test tsx --inspect=9022 & npm test -- --watchAll",
     "test:integration": "NODE_ENV=test npm test -- --watchAll -c jest-integration.config.ts",
-    "test:debug": "NODE_ENV=test tsx --inspect=9022 --watch ./src/main/http/server.ts",
-    "test:unit": "npm test -- --watchAll -c jest-unit.config.ts"
+    "test:unit": "NODE_ENV=test npm test -- --watchAll -c jest-unit.config.ts",
+    "test:coverage": "NODE_ENV=test npm test -- --watchAll -c jest-unit.config.ts"
   },
   "keywords": [],
   "author": "",
@@ -26,5 +29,11 @@
     "ts-node": "^10.9.2",
     "tsx": "^4.7.2",
     "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "pg": "^8.11.5",
+    "reflect-metadata": "^0.2.2",
+    "typeorm": "^0.3.20"
   }
 }

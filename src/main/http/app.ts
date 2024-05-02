@@ -1,15 +1,18 @@
+import "reflect-metadata"
 import fastify from 'fastify'
-import { IS_DEVELOPMENT } from './config/server'
+import { ENV } from '../../config/env'
 
 const app = fastify({
   logger: {
-    enabled: IS_DEVELOPMENT,
+    enabled: ENV.IS_DEVELOPMENT,
     level: 'info',
     transport: {
       target: 'pino-pretty'
     }
   }
 })
+
+// console.log("[app] ", process.env);
 
 app.get(
   '/_health',
