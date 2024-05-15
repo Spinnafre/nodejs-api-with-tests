@@ -13,7 +13,10 @@
     "debug:test": "NODE_ENV=test tsx --inspect=9022 & npm test -- --watchAll",
     "test:integration": "NODE_ENV=test npm test -- --watchAll -c jest-integration.config.ts",
     "test:unit": "NODE_ENV=test npm test -- --watchAll -c jest-unit.config.ts",
-    "test:coverage": "NODE_ENV=test npm test -- --watchAll -c jest-unit.config.ts"
+    "test:coverage": "NODE_ENV=test npm test -- --watchAll -c jest-unit.config.ts",
+    "compose:watch:logs": "docker container logs -f --tail 100 api-container",
+    "compose:down": "docker compose down",
+    "compose:up": "docker compose up -d"
   },
   "keywords": [],
   "author": "",

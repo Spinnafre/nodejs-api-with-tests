@@ -1,5 +1,6 @@
-import { UserModel } from "@/core/model/user";
-import { AddUserDatabase, IUserDatabase } from "@/core/ports/database/user-database";
+import { User } from '../core/domain/user';
+import { AddUserDatabase, IUserDatabase } from '../core/ports/database/user-database';
+
 
 export class UserRepository implements IUserDatabase {
     save(data: AddUserDatabase.Input): Promise<AddUserDatabase.Output> {
@@ -8,7 +9,7 @@ export class UserRepository implements IUserDatabase {
     delete(id: string): Promise<any> {
         throw new Error("Method not implemented.");
     }
-    getByName(name: string): Promise<UserModel> {
+    getByName(name: string): Promise<User> {
         throw new Error("Method not implemented.");
     }
 

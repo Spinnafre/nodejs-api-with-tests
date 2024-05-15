@@ -1,5 +1,4 @@
-import { UserModel } from "@/core/model/user";
-import { CreateUser } from "../services/create-user";
+
 
 export interface IUserDatabase {
     save(data: AddUserDatabase.Input): Promise<AddUserDatabase.Output>;
@@ -8,8 +7,12 @@ export interface IUserDatabase {
 }
 
 export namespace AddUserDatabase {
-    export type Input = CreateUser.Input
+    export type Input = any
     export type Output = number
+
+    export interface Save {
+        save(data: Input): Promise<Output>
+    }
 }
 
 export namespace DeleteUserDatabase {
@@ -17,5 +20,5 @@ export namespace DeleteUserDatabase {
 }
 
 export namespace GetByNameDatabase {
-    export type Output = UserModel
+    export type Output = any
 }

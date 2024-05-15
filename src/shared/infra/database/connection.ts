@@ -1,6 +1,6 @@
 import { DataSource } from "typeorm"
 import { User } from "./models/User"
-import { ENV } from "@/config/env"
+import { ENV } from "@/main/config/env"
 
 export const AppDataSource = new DataSource({
     type: "postgres",
@@ -8,10 +8,10 @@ export const AppDataSource = new DataSource({
     port: ENV.DB_PORT,
     username: ENV.DB_USER,
     password: ENV.DB_PASSWORD,
-    database: ENV.DB_NAME,
-    synchronize: true,
+    // database: ENV.DB_NAME,
+    synchronize: ENV.IS_DEVELOPMENT === true,
     logging: false,
     entities: [User],
-    migrations: [],
+    migrations: ["./migrations/*{.ts,.js}"],
     subscribers: [],
 })

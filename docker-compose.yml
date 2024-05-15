@@ -4,9 +4,9 @@ services:
       image: postgis/postgis:15-3.3-alpine
       container_name: "database-container"
       volumes:
-        - ./db-data:/var/lib/postgresql/data
+        - ./data/postgresql:/var/lib/postgresql/data
       ports:
-        - "5432:5432"
+        - "127.0.0.1:5431:5432"
       healthcheck:
         test: ["CMD-SHELL", "pg_isready", "-d", "db_prod"]
         interval: 30s
@@ -14,17 +14,23 @@ services:
         retries: 5
         start_period: 80s  
       env_file:
-        - env_file
+        - database-env
       restart: always
       networks:
-        - custom
+        - back-tier
+        
   backend:
-    build: .
+    build: 
+      context: .
+      target: development
     container_name: "api-container"
     restart: always
+    environment:
+      - HTTP_HOST=0.0.0.0
+      - HTTP_PORT=8080
     ports:
-      - "8080:8080"
-      - "9229:9229"
+      - "127.0.0.1:8080:8080"
+      - "127.0.0.1:9222:9222"
     volumes:
       - .:/usr/src/app
       - backend_node_modules:/usr/src/app/node_modules
@@ -32,16 +38,32 @@ services:
       database:
         condition: service_healthy
     networks:
-      - custom
+      - back-tier
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    restart: always
+    depends_on:
+      - database
+    user: '$UID:$GID'
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PG_ADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PG_ADMIN_PASSWORD}
+    ports:
+      - "127.0.0.1:3333:80"
+    volumes:
+      - ./data/pgadmin:/var/lib/pgadmin
+    networks:
+      - back-tier
 
 volumes:
-  db-data: {}
   backend_node_modules: {}
 
-secrets:
-  db-password:
-    file: db/password.txt
+# secrets:
+#   db-password:
+#     file: database-env
     
 networks:
-  private:
+  back-tier:
 

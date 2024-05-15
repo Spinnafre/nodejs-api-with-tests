@@ -112,7 +112,7 @@ const getSanitizedConfig = (config: ENV): CONFIG => {
 
 const config = loadEnvironments()
 const ENV = getSanitizedConfig(config)
-
+console.log(ENV);
 export {
     ENV
 }

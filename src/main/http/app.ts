@@ -1,6 +1,6 @@
 import "reflect-metadata"
 import fastify from 'fastify'
-import { ENV } from '../../config/env'
+import { ENV } from '../config/env'
 
 const app = fastify({
   logger: {
@@ -15,7 +15,7 @@ const app = fastify({
 // console.log("[app] ", process.env);
 
 app.get(
-  '/_health',
+  '/health',
   {
     schema: {
       response: {
@@ -29,6 +29,7 @@ app.get(
     }
   },
   (req, res) => {
+    console.log('kk');
     return {
       message: 'Server is running'
     }
