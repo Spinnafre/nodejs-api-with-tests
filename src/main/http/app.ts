@@ -12,7 +12,9 @@ const app = fastify({
   }
 })
 
-// console.log("[app] ", process.env);
+app.register(import('../../modules/user/infra/http/v1.routes'), {
+  prefix: "v1",
+})
 
 app.get(
   '/health',
@@ -28,10 +30,10 @@ app.get(
       }
     }
   },
-  (req, res) => {
-    console.log('kk');
+  function (req, res) {
+
     return {
-      message: 'Server is running'
+      message: '✅ Server is running'
     }
   }
 )

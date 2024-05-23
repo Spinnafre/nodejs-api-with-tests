@@ -4,7 +4,7 @@ import { AppDataSource } from '@/shared/infra/database/connection'
 
 export const startHTTPServer = async (app: FastifyInstance, dbConnection?: Promise<any>) => {
   //   const connection = await dbConnection()
-  app.log.info({ actor: 'Mongodb' }, 'Connected 🚀')
+  app.log.info({ actor: 'Database' }, 'Connected 🚀')
 
   await AppDataSource.initialize();
 

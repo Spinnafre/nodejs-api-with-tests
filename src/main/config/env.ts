@@ -85,7 +85,7 @@ const getSanitizedConfig = (config: ENV): CONFIG => {
             DB_USER: config.DB_USER_DEV as string,
             DB_PASSWORD: config.DB_PASSWORD_DEV as string,
             DB_PORT: config.DB_PORT_DEV as number,
-            DB_NAME: config.DB_NAME_TEST as string,
+            DB_NAME: config.DB_NAME_DEV as string,
             DB_HOST: config.DB_HOST_DEV as string,
         }],
         ["production", {
@@ -112,7 +112,6 @@ const getSanitizedConfig = (config: ENV): CONFIG => {
 
 const config = loadEnvironments()
 const ENV = getSanitizedConfig(config)
-console.log(ENV);
 export {
     ENV
 }

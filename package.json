@@ -4,6 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "typeorm": "typeorm-ts-node-commonjs -d src/shared/infra/database/connection.ts",
+    "migration:generate": "npm run typeorm migration:generate",
+    "migration:create": "npm run typeorm migration:generate",
+    "migration:run": "npm run typeorm migration:run",
     "start:prod": "NODE_ENV=production npm run ./src/main/http/server.js",
     "start:dev": "NODE_ENV=development tsx --watch ./src/main/http/server.ts",
     "build": "rm -rf ./dist && tsc -p tsconfig.json",
@@ -36,6 +40,7 @@
   "dependencies": {
     "dotenv": "^16.4.5",
     "pg": "^8.11.5",
+    "pino": "^9.1.0",
     "reflect-metadata": "^0.2.2",
     "typeorm": "^0.3.20"
   }
