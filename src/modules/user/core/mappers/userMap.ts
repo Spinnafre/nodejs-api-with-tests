@@ -1,5 +1,5 @@
 import { Logger } from "@/shared/infra/logger/logger";
-import { User } from "../domain/user";
+import { User, UserProps } from "../domain/user";
 
 export class UserMapper {
     public static toDomain(user: any): User | null {
@@ -15,5 +15,20 @@ export class UserMapper {
         }
 
         return userOrError.value
+    }
+
+    public static toPersistency(user: User) {
+        const data: UserProps = {
+            name: user.name,
+            email: user.email
+        }
+
+        if (user.id) {
+            Object.assign(data, {
+                id: user.id
+            })
+        }
+
+        return data
     }
 }

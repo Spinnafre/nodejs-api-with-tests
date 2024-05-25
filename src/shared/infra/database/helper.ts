@@ -2,7 +2,7 @@ import { ENV } from "@/main/config/env"
 import { DbCategoryEntity } from "@/modules/posts/infra/database/model/Category"
 import { DbPostEntity } from "@/modules/posts/infra/database/model/Post"
 import { DbUserEntity } from "@/modules/user/infra/database/model/User"
-import { DataSource } from "typeorm"
+import { DataSource, EntityTarget, ObjectLiteral, Repository } from "typeorm"
 import { Logger } from "../logger/logger"
 
 class DatabaseHelper {
@@ -16,7 +16,7 @@ class DatabaseHelper {
             username: ENV.DB_USER,
             password: ENV.DB_PASSWORD,
             database: ENV.DB_NAME,
-            synchronize: ENV.IS_DEVELOPMENT,
+            synchronize: false, // when the value is "true" and running in watch mode it will sync automatically with database
             logging: ENV.IS_DEVELOPMENT === true,
             entities: [DbUserEntity, DbCategoryEntity, DbPostEntity],
             migrations: ["./src/shared/infra/database/migrations/*.{ts,js}"],
@@ -28,6 +28,10 @@ class DatabaseHelper {
 
     async disconnect(): Promise<void> {
         await this.connection.destroy()
+    }
+
+    getRepository<T extends ObjectLiteral>(entity: EntityTarget<T>): Repository<T> {
+        return this.connection.getRepository<T>(entity)
     }
 
     async cleanDatabase(toClean?: Array<string>): Promise<void> {

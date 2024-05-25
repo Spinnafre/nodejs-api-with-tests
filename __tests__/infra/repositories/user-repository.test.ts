@@ -1,24 +1,83 @@
-import { describe, test, beforeEach, afterAll } from "@jest/globals";
-import { DbHelper } from '../../../src/shared/infra/database/helper'
+import { afterAll, beforeAll, beforeEach, describe, test, expect } from "@jest/globals";
+import { DbHelper } from '../../../src/shared/infra/database/helper';
+import { User, UserProps } from './../../../src/modules/user/core/domain/user';
+import { UserRepository } from './../../../src/modules/user/infra/database/repository/implementation/user-repository';
+import { IUserDatabase } from "../../../src/modules/user/infra/database/repository/user-repository.protocol";
+import { UserPropsBuilder } from "../../builder/user";
 
 describe("User Repository", () => {
-    beforeEach(async () => {
-        await DbHelper.connect()
-    })
+    let userRepository: IUserDatabase
 
-    afterAll(async () => {
+    beforeEach(async () => {
         await DbHelper.cleanDatabase(["user"])
     })
 
+    beforeAll(async () => {
+        await DbHelper.connect()
+        userRepository = new UserRepository()
+    })
+
+    afterAll(async () => {
+        await DbHelper.disconnect()
+    })
+
+    test("Should save a user and return the user ID", async () => {
+
+        const userProps = UserPropsBuilder.aUser().build()
+
+        const response = await userRepository.save(userProps)
+
+        expect(response).toBeDefined()
+        expect(response?.id).toBeDefined()
+    })
+
     test("Should find all users", async () => {
+        const userProps = UserPropsBuilder.aUser().build()
+
+        await userRepository.save(userProps)
+
+        const response = await userRepository.getAll()
+
+        expect(response).not.toBeNull()
+
+        expect(response).toHaveLength(1)
+
+        const user = response![0] as UserProps
+
+        expect(user).toMatchObject(userProps)
 
     })
 
-    test.todo("Should save a user")
+    test("Should find a user by name", async () => {
+        const userProps = UserPropsBuilder.aUser().build()
 
-    test.todo("Should find a user by name")
+        const createUserResponse = await userRepository.save(userProps)
 
-    test.todo("Should remove a user")
+        const user = await userRepository.getByName(userProps.name)
 
-    test.todo("Should return true when check previously recorded email")
+        expect(user).not.toBeNull()
+
+        expect(user).toStrictEqual((createUserResponse as User))
+
+    })
+
+    test("Should remove a user", async () => {
+        const userProps = UserPropsBuilder.aUser().build()
+
+        const createUserResponse = await userRepository.save(userProps)
+
+        const isDeleted = await userRepository.delete((createUserResponse as User).id as string)
+
+        expect(isDeleted).toBeTruthy()
+    })
+
+    test("Should return true when check previously recorded email", async () => {
+        const userProps = UserPropsBuilder.aUser().build()
+
+        await userRepository.save(userProps)
+
+        const alreadyExists = await userRepository.emailAlreadyExists(userProps.email)
+
+        expect(alreadyExists).toBeTruthy()
+    })
 })
