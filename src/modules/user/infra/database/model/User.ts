@@ -1,6 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm"
-
-@Entity({ name: "user" })
+import { DbQuestionEntity } from './../../../../questions/infra/database/models/Question';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { randomUUID } from 'node:crypto'
+@Entity({ name: 'user', schema: 'public' })
 export class DbUserEntity {
 
     @PrimaryGeneratedColumn("uuid")
@@ -19,4 +20,12 @@ export class DbUserEntity {
     })
     email: string
 
+    @OneToMany(() => DbQuestionEntity, (question) => question.user)
+    questions: DbQuestionEntity[]
+
+    constructor() {
+        if (!this.id) {
+            this.id = randomUUID()
+        }
+    }
 }

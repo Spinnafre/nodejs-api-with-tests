@@ -1,29 +1,22 @@
 import { ENV } from "@/main/config/env"
-import { DbCategoryEntity } from "@/modules/posts/infra/database/model/Category"
-import { DbPostEntity } from "@/modules/posts/infra/database/model/Post"
-import { DbUserEntity } from "@/modules/user/infra/database/model/User"
+
 import { DataSource, EntityTarget, ObjectLiteral, Repository } from "typeorm"
 import { Logger } from "../logger/logger"
+import { AppDataSource } from "./connection"
 
 class DatabaseHelper {
-    connection: DataSource
+    public connection: DataSource
+
+    constructor() {
+        this.connection = AppDataSource
+    }
 
     async connect(): Promise<void> {
-        this.connection = new DataSource({
-            type: "postgres",
-            host: ENV.DB_HOST,
-            port: ENV.DB_PORT,
-            username: ENV.DB_USER,
-            password: ENV.DB_PASSWORD,
-            database: ENV.DB_NAME,
-            synchronize: false, // when the value is "true" and running in watch mode it will sync automatically with database
-            logging: ENV.IS_DEVELOPMENT === true,
-            entities: [DbUserEntity, DbCategoryEntity, DbPostEntity],
-            migrations: ["./src/shared/infra/database/migrations/*.{ts,js}"],
-            subscribers: [],
-        })
 
         await this.connection.initialize()
+
+
+        Logger.info(this.connection.isInitialized ? 'Connected to database' : 'Not connected')
     }
 
     async disconnect(): Promise<void> {
@@ -54,7 +47,6 @@ class DatabaseHelper {
 }
 
 const DbHelper = new DatabaseHelper()
-
 export {
     DbHelper
 }

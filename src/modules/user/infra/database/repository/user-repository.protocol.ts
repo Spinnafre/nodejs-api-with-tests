@@ -5,5 +5,5 @@ export interface IUserDatabase {
     delete(id: string): Promise<boolean>;
     getByName(name: string): Promise<User | null>;
     emailAlreadyExists(email: string): Promise<boolean>
-    getAll(): Promise<Array<User | null> | null>
+    getAll(): Promise<Array<UserProps> | null>
 }

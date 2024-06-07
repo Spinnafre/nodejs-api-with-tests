@@ -1,8 +1,7 @@
+import { DbQuestionEntity } from './../../../modules/questions/infra/database/models/Question';
+import { DbUserEntity } from './../../../modules/user/infra/database/model/User';
 import { DataSource } from "typeorm"
 import { ENV } from "../../../main/config/env"
-import { DbUserEntity } from "@/modules/user/infra/database/model/User"
-import { DbCategoryEntity } from "@/modules/posts/infra/database/model/Category"
-import { DbPostEntity } from "@/modules/posts/infra/database/model/Post"
 
 export const AppDataSource = new DataSource({
     type: "postgres",
@@ -11,10 +10,11 @@ export const AppDataSource = new DataSource({
     username: ENV.DB_USER,
     password: ENV.DB_PASSWORD,
     database: ENV.DB_NAME,
-    synchronize: ENV.IS_DEVELOPMENT,
+    synchronize: false, // when the value is "true" and running in watch mode it will sync automatically with database
     logging: ENV.IS_DEVELOPMENT === true,
-    entities: [DbUserEntity, DbCategoryEntity, DbPostEntity],
+    entities: [DbUserEntity, DbQuestionEntity],
     migrations: ["./src/shared/infra/database/migrations/*.{ts,js}"],
+    migrationsTableName: "migrations",
     subscribers: [],
 })
 

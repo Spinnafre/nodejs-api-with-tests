@@ -1,10 +1,9 @@
 
-import { app } from './app'
-import { shutdown } from './helpers/shutdown'
-import { startHTTPServer } from './helpers/startServer'
-  ; (async () => {
-    await startHTTPServer(app)
-  })()
+import { startServer, shutdown } from './helpers/server'
+
+(async () => {
+  await startServer()
+})()
 
 process.on('SIGINT', shutdown(0, 'SIGINT'))
 process.on('SIGTERM', shutdown(0, 'SIGTERM'))

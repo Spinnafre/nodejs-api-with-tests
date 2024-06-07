@@ -1,16 +1,15 @@
 import { User, UserProps } from '@/modules/user/core/domain/user';
 import { UserMapper } from '@/modules/user/core/mappers/userMap';
-import { BaseUserDTO } from '@/modules/user/core/services/models/baseUser';
-import { DbHelper } from '@/shared/infra/database/helper';
+
 import { Repository } from 'typeorm';
 import { DbUserEntity } from '../../model/User';
 import { IUserDatabase } from '../user-repository.protocol';
-
+import { DbHelper } from '@/shared/infra/database/helper';
 export class UserRepository implements IUserDatabase {
     private repository: Repository<DbUserEntity>
 
     constructor() {
-        this.repository = DbHelper.getRepository(DbUserEntity)
+        this.repository = DbHelper.getRepository<DbUserEntity>(DbUserEntity)
     }
 
     async emailAlreadyExists(email: string): Promise<boolean> {
@@ -23,7 +22,7 @@ export class UserRepository implements IUserDatabase {
         return result
     }
 
-    async save(data: User): Promise<User | null> {
+    async save(data: UserProps): Promise<User | null> {
         const userEntity = this.repository.create({
             name: data.name,
             email: data.email
@@ -42,11 +41,15 @@ export class UserRepository implements IUserDatabase {
         return response.affected ? true : false
     }
 
-    async getAll(): Promise<Array<User | null> | null> {
+    async getAll(): Promise<Array<UserProps> | null> {
         const users = await this.repository.find()
 
         if (users.length) {
-            return users.map((u) => UserMapper.toDomain(u))
+            return users.map((u) => ({
+                id: u.id,
+                name: u.name,
+                email: u.email
+            }))
         }
 
         return null

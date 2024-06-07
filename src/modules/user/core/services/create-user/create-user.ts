@@ -19,8 +19,8 @@ export class CreateUser implements CreateUserUseCaseProtocol.IUseCase {
 
         const user = userOrError.value
 
-        const userId = await this._userRepository.save(user)
+        const createdUser = await this._userRepository.save(user)
 
-        return success(userId)
+        return success(createdUser?.id as string)
     }
 }

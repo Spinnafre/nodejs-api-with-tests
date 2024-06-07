@@ -3,8 +3,11 @@ services:
   database:
       image: postgis/postgis:15-3.3-alpine
       container_name: "database-container"
-      volumes:
-        - ./data/postgresql:/var/lib/postgresql/data
+      command: postgres -c fsync=off -c synchronous_commit=off -c full_page_writes=off -c random_page_cost=1.0
+      # volumes:
+      #   - ./data/postgresql:/var/lib/postgresql/data
+        # -- Any script we put under scripts will be copied to the container and run when our database gets initialized
+        #  - ./scripts:/docker-entrypoint-initdb.d 
       ports:
         - "127.0.0.1:5431:5432"
       healthcheck:
@@ -18,6 +21,7 @@ services:
       restart: always
       networks:
         - back-tier
+      tmpfs: /var/lib/postgresql/data
         
   backend:
     build: 
@@ -60,9 +64,6 @@ services:
 volumes:
   backend_node_modules: {}
 
-# secrets:
-#   db-password:
-#     file: database-env
     
 networks:
   back-tier:

@@ -1,4 +1,3 @@
-import { afterAll, beforeAll, beforeEach, describe, test, expect } from "@jest/globals";
 import { DbHelper } from '../../../src/shared/infra/database/helper';
 import { User, UserProps } from './../../../src/modules/user/core/domain/user';
 import { UserRepository } from './../../../src/modules/user/infra/database/repository/implementation/user-repository';
@@ -18,6 +17,7 @@ describe("User Repository", () => {
     })
 
     afterAll(async () => {
+        await DbHelper.cleanDatabase(["user"])
         await DbHelper.disconnect()
     })
 

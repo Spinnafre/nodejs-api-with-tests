@@ -10,12 +10,14 @@ export class UserPropsBuilder {
         return new UserPropsBuilder()
     }
 
-    public withInValidName() {
-        this._user.email = ''
+    public withInValidName(): this {
+        this._user.name = ''
+        return this
     }
 
-    public withInValidEmail() {
+    public withInValidEmail(): this {
         this._user.email = "invalidEmail"
+        return this
     }
 
     public build(): UserProps {
