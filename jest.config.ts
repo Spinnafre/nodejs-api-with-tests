@@ -61,10 +61,10 @@ const config: Config = {
   // forceCoverageMatch: [],
 
   // A path to a module which exports an async function that is triggered once before all test suites
-  // globalSetup: undefined,
+  // globalSetup: "global-setup.ts",
 
   // A path to a module which exports an async function that is triggered once after all test suites
-  // globalTeardown: undefined,
+  // globalTeardown: "global-teardown.ts",
 
   // A set of global variables that need to be available in all test environments
   // globals: {},
@@ -90,10 +90,10 @@ const config: Config = {
   // modulePathIgnorePatterns: [],
 
   // Activates notifications for test results
-  // notify: false,
+  // notify: true,
 
   // An enum that specifies notification mode. Requires { notify: true }
-  // notifyMode: "failure-change",
+  // notifyMode: "change",
 
   // A preset that is used as a base for Jest's configuration
   preset: 'ts-jest',

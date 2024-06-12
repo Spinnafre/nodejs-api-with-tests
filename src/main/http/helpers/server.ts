@@ -20,7 +20,7 @@ const startServer = async () => {
 
 const closeServer = async () => {
   console.log('Closing Database connection...')
-  await DbHelper.disconnect()
+  // await DbHelper.disconnect()
   console.log('Database connection closed.')
 
   console.log('Closing app connections...')

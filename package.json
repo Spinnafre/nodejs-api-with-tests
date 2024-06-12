@@ -15,7 +15,7 @@
     "debug:dev": "NODE_ENV=development tsx --inspect=0.0.0.0:9222 --watch ./src/main/http/server.ts",
     "debug:prod": "NODE_ENV=production node --watch --inspect=0.0.0.0:9222 ./dist/src/main/http/server.js",
     "debug:test": "NODE_ENV=test tsx --inspect=9022 & npm test -- --watchAll",
-    "test:integration": "npm test -- --watchAll -c jest-integration.config.ts",
+    "test:integration": "NODE_ENV=test npm test -- --watchAll -c jest-integration.config.ts",
     "test:unit": "NODE_ENV=test npm test -- --watchAll -c jest-unit.config.ts",
     "test:coverage": "NODE_ENV=test npm test -- --watchAll -c jest-unit.config.ts",
     "server:watch:logs": "docker container logs -f --tail 100 api-container",
@@ -38,6 +38,7 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
+    "docker-compose": "^0.24.8",
     "dotenv": "^16.4.5",
     "pg": "^8.11.5",
     "pino": "^9.1.0",

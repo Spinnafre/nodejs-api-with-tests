@@ -1,46 +1,49 @@
-import request from 'supertest'
-import { app } from "../../../src/main/http/app"
-import { UserRepository } from '../../../src/modules/user/infra/database/repository/implementation/user-repository'
+import { describe, beforeAll, test, afterAll, expect, beforeEach } from '@jest/globals';
+import { closeServer, startServer } from '../../../src/main/http/helpers/server'
 import { DbHelper } from '../../../src/shared/infra/database/helper'
 import { UserPropsBuilder } from '../../builder/user'
 
-describe("Create user route", () => {
+describe("GET /user", () => {
+    let serverAddress: string;
+
     beforeAll(async () => {
-        await DbHelper.connect()
-        await app.ready()
+        serverAddress = await startServer()
     })
 
     beforeEach(async () => {
-        await DbHelper.cleanDatabase(["user"])
+        // await DbHelper.cleanDatabase(["user"])
 
-        const userProps = UserPropsBuilder.aUser().build()
-        const userRepository = new UserRepository()
+        const { email, name } = UserPropsBuilder.aUser().build()
 
-        await userRepository.save(userProps)
+        await fetch(`${serverAddress}/v1/user`, {
+            method: "POST",
+            body: JSON.stringify({
+                email,
+                name
+            }),
+            headers: { "Content-Type": "application/json" }
+        })
     })
 
     afterAll(async () => {
-        await DbHelper.cleanDatabase(["user"])
-        await DbHelper.disconnect()
-        await app.close()
+        // await DbHelper.cleanDatabase(["user"])
+        await closeServer()
     })
 
     test('should return user id when user is created', async () => {
 
-        const response = await request(app.server).get("/v1/user")
-            .set('Accept', 'application/json')
+        const response = await fetch(`${serverAddress}/v1/user`)
 
+        const responseJson = await response.json()
 
-        expect(response.statusCode).toEqual(200);
+        expect(response.status).toEqual(200);
 
-        const body = response.body
+        expect(responseJson).toHaveLength(1)
 
-        expect(body).toHaveLength(1)
-
-        const firstItem = body[0]
-
-        expect(firstItem).toHaveProperty("id")
-        expect(firstItem).toHaveProperty("email")
-        expect(firstItem).toHaveProperty("name")
+        expect(responseJson).toMatchObject([{
+            id: expect.any(String),
+            email: expect.any(String),
+            name: expect.any(String)
+        }])
     })
 })

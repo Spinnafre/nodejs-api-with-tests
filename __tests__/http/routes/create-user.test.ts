@@ -1,20 +1,18 @@
+import { describe, beforeAll, test, afterAll, expect } from '@jest/globals';
 import { closeServer, startServer } from '../../../src/main/http/helpers/server';
 import { DbHelper } from '../../../src/shared/infra/database/helper';
 import { UserPropsBuilder } from '../../builder/user';
 
-describe("Create user route", () => {
+describe("POST /user", () => {
     let serverAddress: string;
 
     beforeAll(async () => {
         serverAddress = await startServer()
     })
 
-    beforeEach(async () => {
-        await DbHelper.cleanDatabase(["user"])
-    })
 
     afterAll(async () => {
-        await DbHelper.cleanDatabase(["user"])
+        // await DbHelper.cleanDatabase(["user"])
 
         await closeServer()
     })
